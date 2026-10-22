@@ -18,7 +18,11 @@ Nos comandos, `<py>` é `python3` no Linux/macOS e `py` no Windows (lá `python`
 
 ## Passos
 
-1. **Base:** ache a maior versão de `Base prospects I CS vN.xlsx` fora de `_old` (ver `fontes.md`). Se a máquina tiver o Box Drive, leia o `.xlsx` direto; senão, salve o retorno de `mcp__Box__get_file_content` em arquivo.
+1. **Base:** use, nesta ordem:
+   1. **`_base_prospects.csv`** na raiz de Sounding Teasers (`429739842036`): export diário da aba Inputs feito pelo n8n. Leia com `mcp__Box__get_file_content` e salve em `base.csv`. Se a data de modificação não for de hoje ou de ontem, siga mesmo assim e anote "base desatualizada (export de DD/MM)" no `_execucoes.md`.
+   2. **Box Drive:** se a máquina tiver, leia o `.xlsx` da pasta local.
+   3. **Conector do Box no `.xlsx`:** `mcp__Box__get_file_content` da maior versão fora de `_old` (ver `fontes.md`). Pode falhar ("text representation is not available").
+   Se nenhuma opção funcionar, aborte (ver Regras).
 2. **Feitos:** liste todas as pastas de `429739842036` (pagine até cobrir `totalCount`) e grave os nomes em `pastas.json`.
 3. **Estado:** baixe `_estado.json` da raiz, se existir.
 4. **Fila:**

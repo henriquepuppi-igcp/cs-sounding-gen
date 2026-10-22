@@ -7,7 +7,20 @@
 ## 2. Ambiente
 Em claude.ai/code, crie um ambiente de nuvem (ex.: `teaser`):
 - **Setup script:** cole o conteúdo de `setup.sh`.
-- **Network access:** Trusted (padrão) basta. O setup usa só pypi, npm e os repositórios do Ubuntu.
+- **Network access:** Trusted (padrão).
+- **Environment variables:** `MAX_MCP_OUTPUT_TOKENS=100000` (deixa o conector do Box devolver o CSV da base inteiro).
+
+## 2b. Export diário da base (n8n)
+A rotina não consegue abrir o `.xlsx` da base pelo conector do Box. Um fluxo no n8n exporta a base em CSV todo dia:
+1. **Schedule Trigger:** dias úteis, 6h (antes da rotina, às 7h).
+2. **Box › Search** por `Base prospects I CS` na pasta `242406799075`, só `.xlsx`.
+3. **Code:** descarta o que estiver em `_old` e pega o maior `vN` do nome.
+4. **Box › Download** do arquivo escolhido.
+5. **Extract from File:** XLSX, aba `Inputs`, sem tratar a 1ª linha como cabeçalho (o script acha o cabeçalho sozinho).
+6. **Convert to File:** CSV, UTF-8, nome `_base_prospects.csv`.
+7. **Box › Upload** na pasta Sounding Teasers (`429739842036`), substituindo o arquivo existente (nova versão).
+
+Teste: rode o fluxo uma vez e confira se `_base_prospects.csv` aparece na raiz de Sounding Teasers e abre com as colunas ID, Deal, Status etc.
 
 ## 3. Rotina
 Em claude.ai/code/routines, **New routine**:

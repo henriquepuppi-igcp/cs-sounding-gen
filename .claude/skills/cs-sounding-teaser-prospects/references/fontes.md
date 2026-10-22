@@ -4,7 +4,7 @@
 
 - **Arquivo:** `Base prospects I CS vN.xlsx`, sempre a **maior versão** que estiver na pasta `4 - Capital Solutions / … / 4. Arquivos padrão - Originação` (folder id `242406799075` no piloto). Versões antigas ficam em `_old` e nunca devem ser usadas.
 - **Como achar:** `mcp__Box__search_files_keyword` com query `Base prospects I CS`, `ancestor_folder_id` = `237205674854` (4 - Capital Solutions), extensão `xlsx`. Pegue a maior versão fora de `_old`.
-- **Leitura:** `mcp__Box__get_file_content`. O resultado costuma ser grande e vai para arquivo, então use python/grep para achar a linha pelo nome do deal e pelo site.
+- **Leitura:** no modo lote, a base vem do `_base_prospects.csv` (export diário, ver `lote.md`, passo 1) e a linha do prospect vem no prompt. Fora do lote: `mcp__Box__get_file_content`. O resultado costuma ser grande e vai para arquivo, então use python/grep para achar a linha pelo nome do deal e pelo site.
 - **Linhas duplicadas:** a mesma empresa pode aparecer mais de uma vez, com origens diferentes (por exemplo, uma linha "Base CS" ativa e outra "Standby M&A"). Use a linha de CS ativa e registre a duplicata na caixa "Fontes e pontos de atenção" como correção a fazer na base.
 
 ### Colunas principais
