@@ -24,7 +24,8 @@ Nos comandos, `<py>` é `python3` no Linux/macOS e `py` no Windows (lá `python`
    3. **Conector do Box no `.xlsx`:** `mcp__Box__get_file_content` da maior versão fora de `_old` (ver `fontes.md`). Pode falhar ("text representation is not available").
    Se nenhuma opção funcionar, aborte (ver Regras).
 2. **Feitos:** liste todas as pastas de `429739842036` (pagine até cobrir `totalCount`) e grave os nomes em `pastas.json`.
-3. **Estado:** baixe `_estado.json` da raiz, se existir.
+3. **Estado:** leia o `_estado.json` da raiz com `mcp__Box__get_file_content` e grave em disco uma **cópia fiel**, byte a byte. Se o conector salvou o retorno em arquivo (tool-results), copie esse arquivo. Se veio inline, transcreva tudo, sem resumir nem trocar valores. **Nunca reconstrua o estado** a partir de outras fontes, nem com valores provisórios (motivo "x", `_codinomes` vazio). Se não conseguir ler o arquivo, aborte.
+   Anote as contagens do original: nº de `_ignorar`, nº de `_codinomes` e nº de pulados e erros.
 4. **Fila:**
    - Primeira execução (sem `_estado.json`): `<py> scripts/pendentes.py <base> pastas.json - --criar-corte 15 --limite 15`. Grava `_estado.json` local com o `_ignorar`.
    - Demais: `<py> scripts/pendentes.py <base> pastas.json _estado.json --limite 25`.
@@ -44,7 +45,7 @@ Nos comandos, `<py>` é `python3` no Linux/macOS e `py` no Windows (lá `python`
    - a versão de envio não tem `[pendente]` nem outro placeholder ("a informar" e "yield a descobrir" são permitidos) e tem as 2 páginas com term sheet e garantias;
    - o codinome não repete nenhum da lista nem outro do mesmo bloco. Se repetir, marque como `erro` ("codinome repetido").
    Leia só o necessário para essas checagens. Se uma falhar, marque o prospect como `erro` com o motivo; ele roda de novo na execução seguinte e substitui os 3 arquivos.
-8. **Atualizar estado:** remova do `_estado.json` os IDs gerados; grave pulados e erros com a data de hoje; grave o codinome de cada gerado em `_codinomes`. Suba com `upload_file_version` (ou `upload_file` na primeira vez).
+8. **Atualizar estado:** remova do `_estado.json` os IDs gerados; grave pulados e erros com a data de hoje; grave o codinome de cada gerado em `_codinomes`. Antes de subir, confira contra as contagens do passo 3: `_ignorar` igual, `_codinomes` igual ou maior, e nenhum pulado ou erro sumido sem ter sido gerado. Se algo diminuiu, **não suba** e registre "estado inconsistente" no `_execucoes.md`. Suba com `upload_file_version` (ou `upload_file` na primeira vez).
 9. **Registrar:** adicione no topo do `_execucoes.md`:
    ```
    ## DD/MM/AAAA
