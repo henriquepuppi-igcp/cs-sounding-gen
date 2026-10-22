@@ -28,7 +28,8 @@ Nos comandos, `<py>` é `python3` no Linux/macOS e `py` no Windows (lá `python`
 4. **Fila:**
    - Primeira execução (sem `_estado.json`): `<py> scripts/pendentes.py <base> pastas.json - --criar-corte 15 --limite 15`. Grava `_estado.json` local com o `_ignorar`.
    - Demais: `<py> scripts/pendentes.py <base> pastas.json _estado.json --limite 25`.
-   - **Fila vazia:** termine aqui, sem subir nada e sem escrever no `_execucoes.md`. Responda só "Nenhum prospect novo".
+   - **Erro (código 2, "base lida com N prospects"):** a base veio vazia ou cortada. Aborte e registre no `_execucoes.md` (ver Regras). Nunca trate isso como fila vazia.
+   - **Fila vazia:** termine aqui, sem subir nada e sem escrever no `_execucoes.md`. Responda "Nenhum prospect novo (base: <base_total> prospects, <ja_feitos> feitos, <ignorados> ignorados, <em_espera> em espera)".
 4b. **Codinomes:** pegue `_codinomes` do `_estado.json`. Se não existir (ou faltar algum ID que já tem pasta), monte lendo a 1ª linha do `_matchmaking.txt` de cada pasta (`DEAL: <Empresa> (<Codinome>)`). Dê a cada subagente do bloco uma **letra inicial diferente** para o codinome, sem repetir letras dentro do bloco (ex.: C, L, T, M, A), e passe a lista inteira de codinomes já usados.
 5. **Aquecer o ambiente (uma vez, antes dos subagentes):** rode `scripts/montar.py` nos templates de `assets/templates/` numa pasta temporária. Isso baixa a fonte e abre o Chromium uma vez, em vez de cada subagente fazer isso ao mesmo tempo.
 6. **Execução:** para cada item da fila, dispare **um subagente por prospect**, com o prompt:

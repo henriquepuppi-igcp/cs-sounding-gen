@@ -15,6 +15,7 @@ Pulados por falta de fonte so voltam a fila depois de ESPERA_DIAS.
 import sys, re, json, argparse, datetime, pathlib, io
 
 ESPERA_DIAS = 28
+MIN_PROSPECTS = 100  # a base tem ~350; menos que isso = leitura falhou ou arquivo cortado
 
 def linhas_xlsx(p):
     import openpyxl
@@ -32,9 +33,20 @@ def linhas_xlsx(p):
             r["ID"] = str(int(float(r["ID"])))
             yield r
 
-def linhas_csv(p):
-    import csv
+def ler_texto(p):
+    """Le .csv/.txt/.json (inclusive o retorno salvo do get_file_content, que pode vir embrulhado em JSON)."""
     t = pathlib.Path(p).read_text(encoding="utf-8-sig")
+    if t.lstrip().startswith(("[", "{")):
+        try:
+            d = json.loads(t)
+            d = d[0] if isinstance(d, list) else d
+            t = d.get("text", t) if isinstance(d, dict) else t
+        except ValueError:
+            pass
+    return t
+
+def linhas_csv(t):
+    import csv
     # delimitador: o que mais aparece na linha de cabecalho (virgula, ponto e virgula ou tab)
     linha_cab = next((l for l in t.splitlines() if "ID" in l and "Deal" in l), t.splitlines()[0])
     delim = max(",;\t", key=linha_cab.count)
@@ -50,10 +62,7 @@ def linhas_csv(p):
             r["ID"] = str(int(float(r["ID"])))
             yield r
 
-def linhas_txt(p):
-    t = pathlib.Path(p).read_text(encoding="utf-8")
-    if t.lstrip().startswith("["):
-        t = json.loads(t)[0]["text"]
+def linhas_txt(t):
     cab = None
     for ln in t.split("\n"):
         cel = [c.strip() for c in ln.split("\t")]
@@ -74,15 +83,20 @@ def main():
     a = ap.parse_args()
     hoje = datetime.date.fromisoformat(a.hoje)
 
+    # formato decidido pelo conteudo, nao pela extensao (o retorno do conector pode ser salvo como .txt)
     if a.base.endswith((".xlsx", ".xlsm")):
         fonte = linhas_xlsx(a.base)
-    elif a.base.endswith(".csv"):
-        fonte = linhas_csv(a.base)
     else:
-        fonte = linhas_txt(a.base)
+        t = ler_texto(a.base)
+        cab = next((l for l in t.splitlines() if "ID" in l and "Deal" in l), "")
+        fonte = linhas_txt(t) if cab.count("\t") > cab.count(",") else linhas_csv(t)
     # so linhas de prospect de verdade (Status "1. Ativo", "2. Farming", "3. Inativo"...); descarta lixo de notas
     linhas = [r for r in fonte if re.match(r"\d\.\s", r.get("Status", ""))]
     base = {r["ID"]: r for r in linhas}
+    if len(base) < MIN_PROSPECTS:
+        # base vazia ou cortada: nao pode virar "nenhum prospect novo"
+        print(json.dumps({"erro": f"base lida com {len(base)} prospects (minimo {MIN_PROSPECTS}). Abortar."}, ensure_ascii=False))
+        sys.exit(2)
     feitos = {m.group(1) for n in json.loads(pathlib.Path(a.pastas).read_text(encoding="utf-8"))
               if (m := re.match(r"(\d+)\s*-", n))}
     estado = {} if a.estado == "-" else json.loads(pathlib.Path(a.estado).read_text(encoding="utf-8"))
@@ -106,7 +120,8 @@ def main():
         item["linha"] = {k: v for k, v in r.items() if k and v}  # linha inteira da base, para o subagente nao baixar a base de novo
         fila.append(item)
     print(json.dumps({"fila": fila[:a.limite], "total_pendente": len(fila),
-                      "ja_feitos": len(feitos & set(base)), "em_espera": espera},
+                      "ja_feitos": len(feitos & set(base)), "em_espera": espera,
+                      "base_total": len(base), "ignorados": len(ignorar & set(base))},
                      ensure_ascii=False, indent=1))
 
 if __name__ == "__main__":
