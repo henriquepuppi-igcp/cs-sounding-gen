@@ -7,9 +7,7 @@
 ## 2. Ambiente
 Em claude.ai/code, crie um ambiente de nuvem (ex.: `teaser`):
 - **Setup script:** cole o conteúdo de `setup.sh`.
-- **Network access:** Custom, com "Also include default list of common package managers" marcado, mais os domínios:
-  `cdn.playwright.dev`, `playwright.download.prss.microsoft.com`, `playwright.azureedge.net`
-  (download do Chromium). Se a primeira execução falhar com `host_not_allowed` em algum outro domínio, adicione-o.
+- **Network access:** Trusted (padrão) basta. O setup usa só pypi, npm e os repositórios do Ubuntu.
 
 ## 3. Rotina
 Em claude.ai/code/routines, **New routine**:

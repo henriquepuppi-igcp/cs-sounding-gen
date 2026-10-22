@@ -69,10 +69,33 @@ def garantir_fontes():
             faces += f"@font-face{{font-family:'{familia}';font-weight:{w};src:url('{f.as_uri()}') format('woff2')}}"
     return faces
 
+def chromium_npm():
+    """Plano B quando o Chromium do Playwright nao pode ser baixado (ex.: rede restrita da rotina na nuvem):
+    usa o Chromium empacotado no npm (@sparticuz/chromium), que vem do registry do npm."""
+    import subprocess, os
+    if os.environ.get("CHROMIUM_PATH") and pathlib.Path(os.environ["CHROMIUM_PATH"]).exists():
+        return os.environ["CHROMIUM_PATH"]
+    pasta = TMP_FONTES.parent / "chromium-npm"
+    npm = shutil.which("npm") or shutil.which("npm.cmd")
+    node = shutil.which("node") or shutil.which("node.exe")
+    if not (pasta / "node_modules/@sparticuz/chromium").exists():
+        subprocess.run([npm, "i", "--prefix", str(pasta), "@sparticuz/chromium@138"], check=True, capture_output=True)
+    r = subprocess.run([node, "--input-type=module", "-e",
+                        "import c from '@sparticuz/chromium'; console.log(await c.executablePath())"],
+                       cwd=pasta, check=True, capture_output=True, text=True)
+    return r.stdout.strip().splitlines()[-1]
+
+async def abrir(p):
+    try:
+        return await p.chromium.launch()
+    except Exception:
+        return await p.chromium.launch(executable_path=chromium_npm(),
+                                       args=["--no-sandbox", "--headless=new", "--single-process", "--no-zygote"])
+
 async def alturas(arq):
     from playwright.async_api import async_playwright
     async with async_playwright() as p:
-        b = await p.chromium.launch()
+        b = await abrir(p)
         pg = await b.new_page(viewport={"width": 900, "height": 1200})
         await pg.goto(arq.resolve().as_uri())
         await pg.add_style_tag(content=garantir_fontes())
