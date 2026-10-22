@@ -1,0 +1,18 @@
+DEAL: GooRoo Crédito (Projeto Atlas) | Sounding teaser aprovado em 27/09/2026
+SETOR: FINSERV | MICROSETOR: Fintech | MACROPRODUTO: Finserv consolidado | SEDE: São Paulo/SP
+
+DESCRIÇÃO: Originadora de crédito consignado privado (Crédito do Trabalhador, empregados CLT), 100% digital, parcela limitada a 35% do salário líquido. Carteira pulverizada de crédito ao trabalhador; baixa concentração por empregador (top 10 = 3% da carteira). Funding via FIDC próprio (um único FIDC hoje). Receita relevante de seguros: 95% das operações com prestamista, 100% colocado com seguradora do grupo Rodobens, com repasse (rebate) relevante.
+
+FINANCIALS (Granola 25/09/2026): Carteira de crédito R$ 1,0 bi | Originação mensal ~R$ 100 mi | Prazo médio 19 meses | Taxa média 5,35% a.m. (novas originações 3,x% a.m.) | Over90 20-25% | Over180 15% | Ticket médio R$ 1.900 | PL FIDC R$ 1,0 bi | Estrutura atual do FIDC: 47% sênior / 36,3% mezanino / 16,9% júnior | Remuneração atual: sênior CDI+4%, mezanino CDI+6% a CDI+8,5% | Rebate de seguros ~R$ 5 mi/mês (~R$ 60 mi/ano) | Auditado: a confirmar.
+
+OPERAÇÕES EM SONDAGEM:
+1) Dívida corporativa ~R$ 50 mi, prazo 36/48 meses, garantia/escrow sobre fluxo futuro de rebate de seguros; risco atrelado à performance de originação, não à geração de caixa. Yield a descobrir.
+2) Cotas sênior de novo FIDC de consignado CLT (portabilidade), estrutura-alvo 65% sênior / 20% mezanino / 15% júnior, até R$ 500 mi; sênior CDI+3% a 3,5%, 35% de subordinação.
+3) Cotas mezanino (R$ 50 mi), CDI+4% a 5%, 15% de subordinação.
+4) Cotas júnior (R$ 50 mi); júnior atual com 160% de retorno nominal YTD 2026.
+
+USO DOS RECURSOS: recompra da participação societária de sócio de tecnologia (~R$ 50 mi); recompra de cotas mezanino (R$ 57,5 mi) e júnior (~R$ 49-50 mi) detidas por banco cotista. Preferência por crédito ao invés de equity.
+
+FLAGS: consignado privado CLT; carteira pulverizada B2C; FIDC com subordinação mezanino e júnior; garantia sobre recebíveis de seguros futuros; Over90 elevado (20-25%); gestora atual do FIDC tende a permanecer - maior chance com alocadores; auditoria a confirmar.
+
+PERFIL DE INVESTIDOR BUSCADO: alocadores e fundos de FIDC com apetite a consignado privado/crédito pulverizado B2C (sênior, mezanino, júnior); fundos de crédito privado/special situations para dívida corporativa lastreada em fluxo de seguros.
